@@ -1,24 +1,49 @@
 <!DOCTYPE html>
 <html lang="en-US">
-
-<head>
-    <meta charset="utf-8">
+  <head>
+    <meta charset="utf-8" />
     <title>Pazaak Game</title>
-    <link rel="stylesheet" href="index.css">
-    <script src="script.js" defer></script>
-</head>
+    <link rel="stylesheet" href="index.css" />
+    <script type="module" src="script.js" defer></script>
+  </head>
 
-<body>
+  <body>
     <h1>Pazaak</h1>
     <h2 id="statusText">Welcome</h2>
-    <p id="playerText">Your hand: </p>
-    <p id="opponentText">Opponent's Hand: </p>
-    
-    <button id="start"onclick="InitGame()">Start Game</button>
-    <button id="grab" onclick="GrabCard()">Grab Card</button>
-    <button id="hold" onclick="HoldPlayer()">Hold</button>
 
-    <button id="end" onclick="EndGame()">End Game</button>
-</body>
+    <div class="playerdiv">
+      <p>Your hand:</p>
+      <p id="playerText"></p>
+    </div>
 
+    <div class="playerdiv">
+      <p>Opponent's Hand:</p>
+      <p id="opponentText"></p>
+    </div>
+
+    <div class="mainTableDiv">
+      <div id="playerTableImg" class="playerdiv">
+        <!-- Player Cards played go here -->
+      </div>
+
+      <div id="opponentTableImg" class="playerdiv">
+        <!-- Opponent Cards played go here -->
+      </div>
+    </div>
+
+    <div id="playerCardsImg" class="playerdiv">
+      <!-- Cards go here -->
+    </div>
+
+    <div id="playerActions" class="playerActionsDiv">
+      <button id="grab">Grab Card</button>
+      <button id="hold">Hold</button>
+      <button id="pass">Pass Turn</button>
+    </div>
+
+    <div class="gameActionsDiv">
+      <button id="start">Start Game</button>
+      <button id="end">End Game</button>
+    </div>
+  </body>
 </html>

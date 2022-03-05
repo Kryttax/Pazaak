@@ -1,15 +1,24 @@
-import Utils from "./Utils/Utils";
+import * as Utils from "./Utils/Utils.js";
+import * as AIPlayer from "./AIPlayer.js";
+
+import { Card, Normal, PlusMinus } from "./Card.js";
 
 let handSum = 0;
 
 let startGameBtn;
 let grabCardBtn;
 let holdBtn;
+let passBtn;
+let endGameBtn;
 
 let gameStatusText;
 
 let playerHandText;
 let opponentHandText;
+
+let playerCardsImgs;
+let playerTableImgs;
+let opponentTableImgs;
 
 const Player1 = Symbol("Human");
 const Player2 = Symbol("Opponent");
@@ -24,41 +33,83 @@ let opponenthand = [];
 let playerHold = false;
 let opponentHold = false;
 
+let cardsPath = "./img/Pazaak Cards/pazaakCards";
+
 class Player {
+  name = "";
   holded = false;
   points = 0;
   isAI = false;
-  deckCards = [1, 1, 1, -1, -1, -1];
+  deckCards = [];
   handCards = [];
+
+  constructor(name, isAI) {
+    this.name = name;
+    this.isAI = isAI;
+  }
+
+  InitDeck() {
+    for (let pos = 0; pos < 3; pos++)
+      this.deckCards.push(new Card(1, cardsPath + "1.png", Normal));
+    for (let neg = 0; neg < 3; neg++)
+      this.deckCards.push(new Card(-1, cardsPath + "-1.png", Normal));
+  }
 
   AddPonits(points) {
     this.points += points;
   }
   AddCardToHand(card) {
     this.handCards.push(card);
+    return this.handCards.length - 1;
   }
   RemoveCardFromHand(index) {
     return this.handCards.splice(index, 1)[0];
   }
 
-  AddCardToDeck() {}
+  AddCardToDeck(card) {
+    this.deckCards.push(card);
+    return this.deckCards.length - 1;
+  }
   RemoveCardFromDeck(index) {
     return this.deckCards.splice(index, 1)[0];
   }
+
+  UseCardFromHand(index)
+  {
+    var card = this.RemoveCardFromDeck(index);
+    this.AddPonits(card.value);
+    return card;
+  }
 }
 
-let currentPlayer = new Player();
-let otherPlayer = new Player();
+let currentPlayer;
+let otherPlayer;
+
+function AssignButtons() {
+  console.log("Assigning buttons...");
+  startGameBtn = document.getElementById("start");
+  startGameBtn.addEventListener("click", InitGame, false);
+  grabCardBtn = document.getElementById("grab");
+  grabCardBtn.addEventListener("click", GrabCard, false);
+  holdBtn = document.getElementById("hold");
+  holdBtn.addEventListener("click", HoldPlayer, false);
+  passBtn = document.getElementById("pass");
+  passBtn.addEventListener("click", PassTurn, false);
+  endGameBtn = document.getElementById("end");
+  endGameBtn.addEventListener("click", EndGame, false);
+}
+
+AssignButtons();
 
 function InitGame() {
   console.log("Initiating game params...");
-  startGameBtn = document.getElementById("start");
-  grabCardBtn = document.getElementById("grab");
-  holdBtn = document.getElementById("hold");
-
   gameStatusText = document.getElementById("statusText");
   playerHandText = document.getElementById("playerText");
   opponentHandText = document.getElementById("opponentText");
+
+  playerCardsImgs = document.getElementById("playerCardsImg");
+  playerTableImgs = document.getElementById("playerTableImg");
+  opponentTableImgs = document.getElementById("opponentTableImg");
 
   startGameBtn.style.visibility = "hidden";
   grabCardBtn.style.visibility = "visible";
@@ -67,8 +118,15 @@ function InitGame() {
   playerHandText.style.visibility = "visible";
   opponentHandText.style.visibility = "visible";
 
-  InitDeck();
-  otherPlayer.isAI = true;
+  playerHandText.textContent = 0;
+  opponentHandText.textContent = 0;
+
+  LockButtons();
+  currentPlayer = new Player("You", false);
+  otherPlayer = new Player("Opponent", true);
+
+  InitDecks();
+
   console.log("Games params initiated.");
   StartGame();
 }
@@ -78,53 +136,107 @@ function StartGame() {
   NextRound();
 }
 
-function InitDeck() {
+function InitDecks() {
   // Main Deck  -- 40 cards, 4 of each (1-10)
-  for (let i = 1; i <= 10; i++) for (let j = 0; j < 4; j++) deckCards.push(i);
+  for (let i = 1; i <= 10; i++) 
+    for (let j = 0; j < 4; j++)
+      deckCards.push(new Card(i, cardsPath + "D" + i + ".png", Normal));
+
+  //Init players' deck
+  currentPlayer.InitDeck();
+  otherPlayer.InitDeck();
 }
 
+function PassTurn() {
+  SwitchPlayers();
+  NextRound();
+}
+
+// Main Game Loop
 function NextRound() {
+  if (currentPlayer.holded && otherPlayer.holded) {
+    EndGame();
+    return;
+  }
+
   // Add random card to player
-  if (currentPlayer.holded) SwitchPlayers();
+  if (currentPlayer.holded) PassTurn();
   else {
     AssignCardFromMainDeck();
+  }
+  UpdateUI();
+
+  if (CanGameContinue()) {
+    if (!currentPlayer.isAI) UnlockButtons();
+    else AITurn();
+  }
+}
+
+function AITurn() {
+  switch (AIPlayer.Decide(currentPlayer.points)) {
+    case AIPlayer.Hold:
+      HoldPlayer();
+      break;
+    case AIPlayer.Pass:
+      PassTurn();
+      break;
+    case AIPlayer.PlayCard:
+      break;
+    default:
+      PassTurn();
+      break;
   }
 }
 
 function SwitchPlayers() {
+  console.log("Switching players...");
   let auxPlayer = currentPlayer;
   currentPlayer = otherPlayer;
   otherPlayer = auxPlayer;
 }
 
 function AssignCardFromMainDeck() {
-  currentPlayer.AddPonits(GetRandomCardFromMainDeck());
+  var card = GetRandomCardFromMainDeck();
+  var cardImg = CreateStaticCard(card);
+  currentPlayer.AddPonits(card.value);
 }
 
 function GetRandomCardFromMainDeck() {
-  return deckCards.splice(Utils.getRandomInt(0, deckCards.length - 1), 1)[0];
+  return deckCards.splice(Utils.GetRandomInt(0, deckCards.length - 1), 1)[0];
 }
 
 function GetRandomCardFromPlayerDeck() {
   return currentPlayer.RemoveCardFromDeck(
-    Utils.getRandomInt(0, currentPlayer.playerDeck.length - 1)
+    Utils.GetRandomInt(0, currentPlayer.deckCards.length - 1)
   );
 }
 
 function GrabCard() {
-  currentPlayer.AddCardToHand(GetRandomCardFromPlayerDeck());
-  CheckGameStatus();
+  var card = GetRandomCardFromPlayerDeck();
+  var index = currentPlayer.AddCardToHand(card);
+  var cardImg = CreatePlayableCard(card, index);
+  if (CanGameContinue()) PassTurn();
+}
+
+function PlayCard(index) {
+  // Play a card from hand
+  console.log("Playing Card: " + index);
+  currentPlayer.UseCardFromHand(index);
+  if (CanGameContinue()) PassTurn();
 }
 
 function HoldPlayer() {
   currentPlayer.holded = true;
-  CheckGameStatus();
+  if (CanGameContinue()) PassTurn();
 }
 
-function CheckGameStatus() {
-  if (CheckIfPazaak()) BlockButtons();
-
-  if (CheckGameOver()) EndGame();
+function CanGameContinue() {
+  if (CheckIfPazaak() || CheckGameOver()) {
+    LockButtons();
+    EndGame();
+    return false;
+  }
+  return true;
 }
 
 function CheckIfPazaak() {
@@ -139,9 +251,32 @@ function EndGame() {
   // Set current Player as non-AI player
   if (currentPlayer.isAI) SwitchPlayers();
 
-  if (currentPlayer.points === 20 && otherPlayer.points === 20)
-    gameStatusText = "Both players win!";
-  else if (currentPlayer.points > 20) ResetGame();
+  playerHandText.textContent = currentPlayer.points;
+  opponentHandText.textContent = otherPlayer.points;
+
+  if (
+    currentPlayer.points === otherPlayer.points &&
+    currentPlayer.points <= 20 &&
+    otherPlayer.points <= 20
+  )
+    gameStatusText.textContent = "Tied Game";
+  else if (currentPlayer.points === 20 || otherPlayer.points > 20) {
+    gameStatusText.textContent = "You win!";
+  } else if (otherPlayer.points === 20 || currentPlayer.points > 20) {
+    gameStatusText.textContent = "Your oponent wins...";
+  } else {
+    // Check closest to 20
+    let winner = Utils.GetClosestTo(
+      20,
+      currentPlayer.points,
+      otherPlayer.points
+    );
+    if (winner === currentPlayer.points)
+      gameStatusText.textContent = "You win!";
+    else gameStatusText.textContent = "Your oponent wins...";
+  }
+
+  ResetGame();
 }
 
 function ResetGame() {
@@ -152,12 +287,66 @@ function ResetGame() {
   grabCardBtn.disabled = "enabled";
   holdBtn.disabled = "enabled";
 
-  playerHandText.style.visibility = "hidden";
-  opponentHandText.style.visibility = "hidden";
+  // playerHandText.style.visibility = "hidden";
+  // opponentHandText.style.visibility = "hidden";
   console.log("Game ended.");
 }
 
-function BlockButtons() {
-  grabCardBtn.disabled = "disabled";
-  holdBtn.disabled = "disabled";
+function LockButtons() {
+  grabCardBtn.disabled = true;
+  holdBtn.disabled = true;
+  passBtn.disabled = true;
+}
+
+function UnlockButtons() {
+  grabCardBtn.disabled = false;
+  holdBtn.disabled = false;
+  passBtn.disabled = false;
+}
+
+function CreateStaticCard(card) {
+  var cardImg = document.createElement("img");
+  cardImg.setAttribute("class", "cardImg");
+  cardImg.setAttribute("src", card.imgSrc);
+  cardImg.setAttribute("alt", "Card");
+  if(!currentPlayer.isAI)
+    playerTableImgs.appendChild(cardImg);
+  else
+  opponentTableImgs.appendChild(cardImg);
+  return cardImg;
+}
+
+function CreatePlayableCard(card, index) {
+  var cardImg = document.createElement("img");
+  cardImg.setAttribute("class", "cardImg");
+  cardImg.setAttribute("src", card.imgSrc);
+  cardImg.setAttribute("alt", "Card");
+  cardImg.addEventListener("click", auxCaller, false);
+  cardImg.pos = index;
+  function auxCaller() {
+    PlayCard(cardImg.pos);
+  }
+  playerCardsImgs.appendChild(cardImg);
+  return cardImg;
+}
+
+function ShowCards() {
+  playerCardsImgs.style.visibility = "visible";
+}
+
+function HideCards() {
+  playerCardsImgs.style.visibility = "hidden";
+}
+
+function UpdateUI() {
+  if (!currentPlayer.isAI) {
+    gameStatusText.textContent = "Your Turn";
+    playerHandText.textContent = currentPlayer.points;
+    ShowCards();
+  } else {
+    gameStatusText.textContent = "Opponent's Turn";
+    opponentHandText.textContent = currentPlayer.points;
+    HideCards();
+  }
+  console.log("UI updated.");
 }

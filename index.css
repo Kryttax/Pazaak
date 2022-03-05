@@ -28,3 +28,22 @@ button {
   border: none;
   border-radius: 2px;
 }
+
+.mainTableDiv{
+  display: block;
+  margin-right: 30px 0;
+}
+
+.playerdiv {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.cardImg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
