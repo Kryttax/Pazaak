@@ -222,8 +222,8 @@ function GrabCard() {
 
 function PlayCard(index) {
   // Play a card from hand
-  if (currentPlayer.canPlayCard) {
-    console.log("Playing Card: " + index);
+  console.log("Playing Card: " + index);
+  if (currentPlayer.canPlayCard) {  
     var cardPlayed = currentPlayer.UseCardFromHand(index);
     CreateStaticCard(cardPlayed);
     RemovePlayableCard(index);
@@ -313,10 +313,14 @@ function EndGame() {
 }
 
 function ResetGame() {
-  console.log("Ending game...");
+  console.log("Reseting game...");
   startGameBtn.style.visibility = "visible";
   holdBtn.disabled = true;
-  console.log("Game ended.");
+
+  CleanTables();
+  CleanPlayerHand();
+
+  console.log("All Game's params reset.");
 }
 
 function LockButtons() {
@@ -344,10 +348,11 @@ function CreatePlayableCard(card, index) {
   cardImg.setAttribute("class", "cardImg");
   cardImg.setAttribute("src", card.imgSrc);
   cardImg.setAttribute("alt", "Card");
-  cardImg.addEventListener("click", auxCaller, false);
+  cardImg.addEventListener("click", LaunchWithIndex, false);
   cardImg.pos = index;
-  function auxCaller() {
-    PlayCard(cardImg.pos);
+  function LaunchWithIndex() {
+    var index = Array.prototype.indexOf.call(playerCardsImgs.children, cardImg);
+    PlayCard(index);
   }
   playerCardsImgs.appendChild(cardImg);
   return cardImg;
