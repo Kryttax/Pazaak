@@ -29,6 +29,7 @@ class Player {
   name = "";
   holded = false;
   points = 0;
+  setsWon = 0;
   isAI = false;
   canPlayCard = true;
   deckCards = [];
@@ -91,8 +92,9 @@ function AssignButtons() {
 }
 
 AssignButtons();
+AssignParams();
 
-function InitGame() {
+function AssignParams() {
   console.log("Initiating game params...");
   gameStatusText = document.getElementById("statusText");
   currentSetText = document.getElementById("setText");
@@ -103,12 +105,19 @@ function InitGame() {
   playerTableImgs = document.getElementById("playerTableImg");
   opponentTableImgs = document.getElementById("opponentTableImg");
 
-  startGameBtn.style.visibility = "hidden";
+  endGameBtn.style.visibility = "hidden";
   nextSetBtn.style.visibility = "hidden";
-  holdBtn.style.visibility = "visible";
+  startGameBtn.style.visibility = "visible";
+  HidePlayButtons();
 
   playerHandText.style.visibility = "visible";
   opponentHandText.style.visibility = "visible";
+  console.log("Games params initiated.");
+}
+
+function InitGame() {
+  startGameBtn.style.visibility = "hidden";
+  endGameBtn.style.visibility = "visible";
 
   playerHandText.textContent = 0;
   opponentHandText.textContent = 0;
@@ -117,13 +126,13 @@ function InitGame() {
   currentSetText.textContent = currentSet;
 
   LockButtons();
+  ShowPlayButtons();
   currentPlayer = new Player("You", false);
   otherPlayer = new Player("Opponent", true);
 
   InitDecks();
   AssignHand();
 
-  console.log("Games params initiated.");
   StartGame();
 }
 
@@ -148,34 +157,43 @@ function AssignHand() {
 }
 
 function PassTurn() {
+  LockButtons();
   SwitchPlayers();
   currentPlayer.canPlayCard = true;
+  UpdateUI();
   NextRound();
 }
 
 // Main Game Loop
-function NextRound() {
+async function NextRound() {
   if (currentPlayer.holded && otherPlayer.holded) {
     EndSet();
     return;
   }
-
   // Add random card to player
   if (currentPlayer.holded) {
     PassTurn();
     return;
-  } else {
-    AssignCardFromMainDeck();
   }
-  UpdateUI();
 
+  if (CheckIfPazaak() || CheckIfOver9()) {
+    HoldPlayer();
+    return;
+  }
+
+  AssignCardFromMainDeck(PlayersActions);
+}
+
+function PlayersActions() {
   if (CanGameContinue()) {
     if (!currentPlayer.isAI) UnlockButtons();
     else AITurn();
   }
 }
 
-function AITurn() {
+async function AITurn() {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  console.log("Waited 3s");
   switch (AIPlayer.Decide(currentPlayer.points)) {
     case AIPlayer.Hold:
       HoldPlayer();
@@ -198,12 +216,20 @@ function SwitchPlayers() {
   otherPlayer = auxPlayer;
 }
 
-function AssignCardFromMainDeck() {
+async function AssignCardFromMainDeck(callback) {
   var card = GetRandomCardFromMainDeck();
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   var cardImg = CreateStaticCard(card);
   currentPlayer.AddPonits(card.value);
-}
 
+  UpdateUI();
+
+  if (CheckIfPazaak()) {
+    HoldPlayer();
+    return;
+  }
+  callback();
+}
 function GetRandomCardFromMainDeck() {
   return deckCards.splice(Utils.GetRandomInt(0, deckCards.length - 1), 1)[0];
 }
@@ -223,7 +249,7 @@ function GrabCard() {
 function PlayCard(index) {
   // Play a card from hand
   console.log("Playing Card: " + index);
-  if (currentPlayer.canPlayCard) {  
+  if (currentPlayer.canPlayCard) {
     var cardPlayed = currentPlayer.UseCardFromHand(index);
     CreateStaticCard(cardPlayed);
     RemovePlayableCard(index);
@@ -237,7 +263,7 @@ function HoldPlayer() {
 }
 
 function CanGameContinue() {
-  if (CheckIfPazaak() || CheckGameOver()) {
+  if (CheckIfDoublePazaak() || CheckGameOver()) {
     LockButtons();
     EndSet();
     return false;
@@ -245,8 +271,17 @@ function CanGameContinue() {
   return true;
 }
 
+function CheckIfOver9() {
+  if (!currentPlayer.isAI) return playerTableImgs.children.length >= 9;
+  else return opponentTableImgs.children.length >= 9;
+}
+
 function CheckIfPazaak() {
   return currentPlayer.points === 20;
+}
+
+function CheckIfDoublePazaak() {
+  return currentPlayer.points === 20 && otherPlayer.points === 20;
 }
 
 function CheckGameOver() {
@@ -265,11 +300,13 @@ function CheckWinner() {
     currentPlayer.points <= 20 &&
     otherPlayer.points <= 20
   )
-    gameStatusText.textContent = "Tied Game";
+    gameStatusText.textContent = "Tied Set";
   else if (currentPlayer.points === 20 || otherPlayer.points > 20) {
-    gameStatusText.textContent = "You win!";
+    currentPlayer.setsWon++;
+    gameStatusText.textContent = "You win this set!";
   } else if (otherPlayer.points === 20 || currentPlayer.points > 20) {
-    gameStatusText.textContent = "Your oponent wins...";
+    otherPlayer.setsWon++;
+    gameStatusText.textContent = "Your oponent wins this set...";
   } else {
     // Check closest to 20
     let winner = Utils.GetClosestTo(
@@ -277,16 +314,37 @@ function CheckWinner() {
       currentPlayer.points,
       otherPlayer.points
     );
-    if (winner === currentPlayer.points)
-      gameStatusText.textContent = "You win!";
-    else gameStatusText.textContent = "Your oponent wins...";
+    if (winner === currentPlayer.points) {
+      currentPlayer.setsWon++;
+      gameStatusText.textContent = "You win this set!";
+    } else {
+      otherPlayer.setsWon++;
+      gameStatusText.textContent = "Your oponent wins this set...";
+    }
   }
+}
+
+function CheckFinishGame() {
+  if (currentPlayer.setsWon < 3 && otherPlayer.setsWon < 3) return false;
+  if (currentPlayer.setsWon === 3 && otherPlayer.setsWon === 3) return false;
+
+  if (currentPlayer.setsWon > otherPlayer.setsWon)
+    gameStatusText.textContent = "You win the Game!";
+  else gameStatusText.textContent = "Your oponent wins the Game...";
+
+  endGameBtn.textContent = "Play Again";
+  endGameBtn.style.visibility = "visible";
+  startGameBtn.style.visibility = "hidden";
+
+  HidePlayButtons();
+
+  return true;
 }
 
 function EndSet() {
   LockButtons();
-  nextSetBtn.style.visibility = "visible";
   CheckWinner();
+  if (!CheckFinishGame()) nextSetBtn.style.visibility = "visible";
 }
 
 function MoveToNextSet() {
@@ -313,9 +371,16 @@ function EndGame() {
 }
 
 function ResetGame() {
-  console.log("Reseting game...");
+  endGameBtn.textContent = "Exit Game";
+  endGameBtn.style.visibility = "hidden";
   startGameBtn.style.visibility = "visible";
-  holdBtn.disabled = true;
+  nextSetBtn.style.visibility = "hidden";
+  HidePlayButtons();
+
+  gameStatusText.textContent = "Welcome";
+  playerHandText.textContent = "";
+  opponentHandText.textContent = "";
+  currentSetText.textContent = "";
 
   CleanTables();
   CleanPlayerHand();
@@ -328,9 +393,19 @@ function LockButtons() {
   passBtn.disabled = true;
 }
 
+function ShowPlayButtons() {
+  holdBtn.style.visibility = "visible";
+  passBtn.style.visibility = "visible";
+}
+
 function UnlockButtons() {
   holdBtn.disabled = false;
   passBtn.disabled = false;
+}
+
+function HidePlayButtons() {
+  holdBtn.style.visibility = "hidden";
+  passBtn.style.visibility = "hidden";
 }
 
 function CreateStaticCard(card) {
