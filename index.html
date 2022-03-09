@@ -10,45 +10,45 @@
   <body>
     <h1>Pazaak</h1>
     <h2 id="statusText">Welcome</h2>
-    <div class="playerdiv">
-        <h3>Set: </h3>
-        <h3 id="setText"></h3>
+    <div class="setDiv">
+        <p id="setText"></p>
     </div>
     
-
-    <div class="playerdiv">
-      <p>Your hand:</p>
-      <p id="playerText"></p>
+    <div class="pointsDiv">
+      <div class="singlePointDiv">
+        <p id="playerText"></p>
+      </div>
+      <div class="singlePointDiv">
+        <p id="opponentText"></p>
+      </div>
     </div>
-
-    <div class="playerdiv">
-      <p>Opponent's Hand:</p>
-      <p id="opponentText"></p>
-    </div>
-
+   
     <div class="mainTableDiv">
-      <div id="playerTableImg" class="playerdiv">
+      <div id="playerTableImg" class="table">
         <!-- Player Cards played go here -->
       </div>
 
-      <div id="opponentTableImg" class="playerdiv">
+      <div id="opponentTableImg" class="table">
         <!-- Opponent Cards played go here -->
       </div>
     </div>
 
-    <div id="playerCardsImg" class="playerdiv">
-      <!-- Cards go here -->
+    <div class="handTableDiv">
+      <div id="playerCardsImg" class="cardsdiv">
+        <!-- Hand Cards go here -->
+      </div>
     </div>
-
-    <div id="playerActions" class="playerActionsDiv">
-      <button id="hold">Hold</button>
-      <button id="pass">Pass Turn</button>
-    </div>
-
-    <div class="gameActionsDiv">
-      <button id="start">Start Game</button>
-      <button id="next">Next Round</button>
-      <button id="end">Exit Game</button>
+    <div class="actionsDiv">
+      <div id="playerActions" class="playerActionsDiv">
+        <button id="hold">Hold</button>
+        <button id="pass">Pass Turn</button>
+      </div>
+  
+      <div class="gameActionsDiv">
+        <button id="start">Start Game</button>
+        <button id="next">Next Round</button>
+        <button id="end">Exit Game</button>
+      </div>
     </div>
   </body>
 </html>

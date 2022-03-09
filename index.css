@@ -19,24 +19,108 @@ main {
 }
 
 button {
-  width: 150px;
-  background: white;
+  border: none;
+  width: 100px;
+  height: 150px;
+  background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
   padding-top: 5px;
   padding-bottom: 5px;
   margin: 5px;
   font-weight: bold;
   border: none;
-  border-radius: 2px;
 }
 
-.mainTableDiv{
-  display: block;
-  margin-right: 30px 0;
-}
-
-.playerdiv {
-  display: flex;
+.setDiv {
+  box-shadow: 0px 5px 20px rgb(177, 177, 177);
+  width: 50px;
+  height: 50px;
   align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: 0 auto;
+  background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
+  border-radius: 50%;
+  display: flex;
+}
+
+.pointsDiv {
+  margin: 0 auto;
+  width: 50%;
+  display: inline-flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.singlePointDiv {
+  box-shadow: 0px 5px 20px rgb(177, 177, 177);
+  width: 50px;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
+  border-radius: 50%;
+}
+
+.mainTableDiv {
+  width: 50%;
+  padding: 20px;
+  border-radius: 2%;
+  align-items:flex-start;
+  text-align: center;
+  margin: 0 auto;
+  display: grid;
+  grid-auto-flow: column;
+  grid-column-gap: 10px;
+  grid-auto-columns: max-content;
+  grid-template-columns: repeat(2, minmax(100px, 1fr));
+  background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
+  justify-content: start;
+}
+
+.table {
+  min-height: 400px;
+  background-image: linear-gradient(120deg, #a6c0fe 0%, #f68084 100%);
+  padding: 20px;
+
+  display: grid;
+  grid-gap: 10px;
+  grid-auto-flow: row;
+  grid-template-columns: repeat(4, minmax(100px, 1fr));
+  grid-template-rows: repeat(auto-fit, minmax(100px, 1fr));
+  align-items:flex-start;
+  justify-content: center;
+  text-align: center;
+}
+
+.handTableDiv{
+  width: 50%;
+  padding: 20px;
+  border-radius: 2%;
+  align-items:flex-start;
+  text-align: center;
+  margin: 0 auto;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  grid-template-columns: repeat(1, minmax(100px, 1fr));
+  background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
+  justify-content: start;
+}
+
+.cardsdiv{
+  width: 50%;
+  padding: 20px;
+  border-radius: 2%;
+  background-image: linear-gradient(120deg, #a6c0fe 0%, #f68084 100%);
+  min-height: 150px;
+  margin: 0 auto;
+
+  display: grid; 
+  grid-auto-flow: row;
+  grid-template-columns: repeat(4, minmax(20px, 1fr));
+  grid-template-rows: repeat(auto-fit, minmax(100px, 1fr));
+  align-items: flex-start;
   justify-content: center;
   text-align: center;
 }
