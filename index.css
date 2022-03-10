@@ -1,14 +1,31 @@
+@font-face {
+  font-family: Orbitron;
+  src: url("./font/Orbitron-VariableFont.ttf");
+}
+
 h1 {
   text-align: center;
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+  font-family: Orbitron, "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
   font-size: 20px;
 }
 
 body {
-  background-color: brown;
+  background-image: linear-gradient(to left, #bdbbbe 0%, #9d9ea3 100%),
+    radial-gradient(
+      88% 271%,
+      rgba(255, 255, 255, 0.25) 0%,
+      rgba(254, 254, 254, 0.25) 1%,
+      rgba(0, 0, 0, 0.25) 100%
+    ),
+    radial-gradient(
+      50% 100%,
+      rgba(255, 255, 255, 0.3) 0%,
+      rgba(0, 0, 0, 0.3) 100%
+    );
+  background-blend-mode: normal, lighten, soft-light;
   text-align: center;
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+  font-family: Orbitron, "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 
@@ -28,6 +45,14 @@ button {
   margin: 5px;
   font-weight: bold;
   border: none;
+  box-shadow: 0px 5px 10px rgb(61, 61, 61);
+  font-family: Orbitron, "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+text {
+  font-family: Orbitron, "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 
 .setDiv {
@@ -62,70 +87,119 @@ button {
   border-radius: 50%;
 }
 
-.mainTableDiv {
+.allTableDiv {
+  background-color: #737373;
+  border-radius: 2%;
   width: 50%;
   padding: 20px;
-  border-radius: 2%;
-  align-items:flex-start;
+  margin: 0 auto;
+}
+
+.mainTableDiv {
+  max-height: 337.5px;
+  padding: 10px;
+  align-items: flex-start;
   text-align: center;
   margin: 0 auto;
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: 10px;
   grid-auto-columns: max-content;
-  grid-template-columns: repeat(2, minmax(100px, 1fr));
-  background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   justify-content: start;
 }
 
 .table {
-  min-height: 400px;
-  background-image: linear-gradient(120deg, #a6c0fe 0%, #f68084 100%);
-  padding: 20px;
+  min-height: 337.5px;
+  border-radius: 2%;
+  background-color: #424242;
+  padding: 10px;
 
   display: grid;
   grid-gap: 10px;
   grid-auto-flow: row;
-  grid-template-columns: repeat(4, minmax(100px, 1fr));
-  grid-template-rows: repeat(auto-fit, minmax(100px, 1fr));
-  align-items:flex-start;
-  justify-content: center;
-  text-align: center;
-}
-
-.handTableDiv{
-  width: 50%;
-  padding: 20px;
-  border-radius: 2%;
-  align-items:flex-start;
-  text-align: center;
-  margin: 0 auto;
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: max-content;
-  grid-template-columns: repeat(1, minmax(100px, 1fr));
-  background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
-  justify-content: start;
-}
-
-.cardsdiv{
-  width: 50%;
-  padding: 20px;
-  border-radius: 2%;
-  background-image: linear-gradient(120deg, #a6c0fe 0%, #f68084 100%);
-  min-height: 150px;
-  margin: 0 auto;
-
-  display: grid; 
-  grid-auto-flow: row;
-  grid-template-columns: repeat(4, minmax(20px, 1fr));
-  grid-template-rows: repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(auto-fit, minmax(0, 1fr));
   align-items: flex-start;
   justify-content: center;
   text-align: center;
 }
 
+.handTableDiv {
+  min-height: 112.5px;
+  padding: 10px;
+  align-items: flex-start;
+  text-align: center;
+  margin: 0 auto;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  justify-content: start;
+  background-color: magenta;
+}
+
+.cardsdiv {
+  width: 50%;
+  padding: 20px;
+  border-radius: 2%;
+  min-height: 112.5px;
+  margin: 0 auto;
+
+  display: grid;
+  grid-auto-flow: row;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(auto-fit, minmax(0, 1fr));
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: gold;
+}
+
+.lowerTableDiv {
+  margin: 20px 0px;
+  display: grid;
+  grid-auto-flow: column;
+  background-color: aqua;
+}
+
+.leftSetDiv {
+  margin: auto 0px auto 0px;
+  width: 50px;
+  height: 150px;
+  text-align: left;
+  justify-content: left;
+  align-items: flex-start;
+  float: right;
+  background-color: green;
+}
+
+.rightSetDiv {  
+  margin: auto 0px auto auto;
+  width: 50px;
+  height: 150px;
+  float: right;
+  text-align: right;
+  align-items:flex-end;
+  justify-content: right;
+  background-color: green;
+}
+
+.setIdentifier {
+  box-shadow: 0px 5px 20px rgb(177, 177, 177);
+  width: 50px;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: 0 auto;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+}
+
 .cardImg {
+  width: 75px;
+  height: 112.5px;
   display: flex;
   align-items: center;
   justify-content: center;

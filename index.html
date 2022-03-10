@@ -1,28 +1,30 @@
 <!DOCTYPE html>
 <html lang="en-US">
-  <head>
-    <meta charset="utf-8" />
-    <title>Pazaak Game</title>
-    <link rel="stylesheet" href="index.css" />
-    <script type="module" src="script.js" defer></script>
-  </head>
 
-  <body>
-    <h1>Pazaak</h1>
-    <h2 id="statusText">Welcome</h2>
-    <div class="setDiv">
-        <p id="setText"></p>
+<head>
+  <meta charset="utf-8" />
+  <title>Pazaak Game</title>
+  <link rel="stylesheet" href="index.css" />
+  <script type="module" src="script.js" defer></script>
+</head>
+
+<body>
+  <h1>Pazaak</h1>
+  <h2 id="statusText">Welcome</h2>
+  <div class="setDiv">
+    <p id="setText"></p>
+  </div>
+
+  <div class="pointsDiv">
+    <div class="singlePointDiv">
+      <p id="playerText"></p>
     </div>
-    
-    <div class="pointsDiv">
-      <div class="singlePointDiv">
-        <p id="playerText"></p>
-      </div>
-      <div class="singlePointDiv">
-        <p id="opponentText"></p>
-      </div>
+    <div class="singlePointDiv">
+      <p id="opponentText"></p>
     </div>
-   
+  </div>
+
+  <div class="allTableDiv">
     <div class="mainTableDiv">
       <div id="playerTableImg" class="table">
         <!-- Player Cards played go here -->
@@ -33,22 +35,41 @@
       </div>
     </div>
 
-    <div class="handTableDiv">
-      <div id="playerCardsImg" class="cardsdiv">
-        <!-- Hand Cards go here -->
+    <div class="lowerTableDiv">
+      <div id="leftSetDiv" class="leftSetDiv">
+        <li class="setIdentifier">1</li>
+        <li class="setIdentifier">2</li>
+        <li class="setIdentifier">3</li>
+      </div>
+      <div class="handTableDiv">
+        <div id="playerCardsImg" class="cardsdiv">
+          <!-- Hand Cards go here -->
+        </div>
+        <div id="opponentCardsImg" class="cardsdiv">
+          <!-- Hand Cards go here -->
+        </div>
+      </div>
+      <div id="rightSetDiv" class="rightSetDiv">
+        <li class="setIdentifier">1</li>
+        <li class="setIdentifier">2</li>
+        <li class="setIdentifier">3</li>
       </div>
     </div>
-    <div class="actionsDiv">
-      <div id="playerActions" class="playerActionsDiv">
-        <button id="hold">Hold</button>
-        <button id="pass">Pass Turn</button>
-      </div>
-  
-      <div class="gameActionsDiv">
-        <button id="start">Start Game</button>
-        <button id="next">Next Round</button>
-        <button id="end">Exit Game</button>
-      </div>
+
+  </div>
+
+  <div class="actionsDiv">
+    <div id="playerActions" class="playerActionsDiv">
+      <button id="hold">Hold</button>
+      <button id="pass">Pass Turn</button>
     </div>
-  </body>
+
+    <div class="gameActionsDiv">
+      <button id="start">Start Game</button>
+      <button id="next">Next Round</button>
+      <button id="end">Exit Game</button>
+    </div>
+  </div>
+</body>
+
 </html>
