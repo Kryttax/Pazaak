@@ -37,8 +37,8 @@ main {
 
 button {
   border: none;
-  width: 100px;
-  height: 150px;
+  width: 200px;
+  height: 50px;
   background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
   padding-top: 5px;
   padding-bottom: 5px;
@@ -53,6 +53,10 @@ button {
 text {
   font-family: Orbitron, "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+.statusText {
+  margin: 0 auto;
 }
 
 .setDiv {
@@ -83,6 +87,8 @@ text {
   align-items: center;
   justify-content: center;
   text-align: center;
+  display: inline-flex;
+  flex-wrap: wrap;
   background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
   border-radius: 50%;
 }
@@ -116,9 +122,9 @@ text {
   padding: 10px;
 
   display: grid;
-  grid-gap: 10px;
+  grid-column-gap: 10px;
   grid-auto-flow: row;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   grid-template-rows: repeat(auto-fit, minmax(0, 1fr));
   align-items: flex-start;
   justify-content: center;
@@ -135,11 +141,13 @@ text {
   grid-auto-flow: column;
   grid-template-columns: repeat(1, minmax(0, 1fr));
   justify-content: start;
-  background-color: magenta;
+  /* background-color: magenta; */
 }
 
 .cardsdiv {
-  width: 50%;
+  width: 80%;
+  min-width: 300px;
+  max-width: 80%;
   padding: 20px;
   border-radius: 2%;
   min-height: 112.5px;
@@ -147,22 +155,32 @@ text {
 
   display: grid;
   grid-auto-flow: row;
+  grid-column-gap: 10px;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-template-rows: repeat(auto-fit, minmax(0, 1fr));
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   text-align: center;
-  background-color: gold;
+  /* background-color: gold; */
+}
+
+.upperInfoDiv {
+  width: 50%;
+  height: 50px;
+  margin: 0 auto;
+  display: grid;
+  grid-auto-flow: column;
+  /* background-color: aqua; */
 }
 
 .lowerTableDiv {
   margin: 20px 0px;
   display: grid;
   grid-auto-flow: column;
-  background-color: aqua;
+  /* background-color: aqua; */
 }
 
-.leftSetDiv {
+.leftDiv {
   margin: auto 0px auto 0px;
   width: 50px;
   height: 150px;
@@ -170,18 +188,18 @@ text {
   justify-content: left;
   align-items: flex-start;
   float: right;
-  background-color: green;
+  /* background-color: green; */
 }
 
-.rightSetDiv {  
+.rightDiv {
   margin: auto 0px auto auto;
   width: 50px;
   height: 150px;
   float: right;
   text-align: right;
-  align-items:flex-end;
+  align-items: flex-end;
   justify-content: right;
-  background-color: green;
+  /* background-color: green; */
 }
 
 .setIdentifier {

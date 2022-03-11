@@ -10,7 +10,6 @@ let nextSetBtn;
 let endGameBtn;
 
 let gameStatusText;
-let currentSetText;
 
 let playerHandText;
 let opponentHandText;
@@ -46,7 +45,6 @@ AssignParams();
 function AssignParams() {
   console.log("Initiating game params...");
   gameStatusText = document.getElementById("statusText");
-  currentSetText = document.getElementById("setText");
   playerHandText = document.getElementById("playerText");
   opponentHandText = document.getElementById("opponentText");
 
@@ -71,7 +69,6 @@ function InitGame() {
   opponentHandText.textContent = 0;
 
   currentSet = 1;
-  currentSetText.textContent = currentSet;
 
   currentPlayer = new Player(false);
   otherPlayer = new Player(true);
@@ -297,8 +294,7 @@ function CheckWinner() {
   }
 }
 
-function AddSetWin(player, setDiv)
-{
+function AddSetWin(player, setDiv) {
   player.setsWon++;
   setDiv.children[player.setsWon - 1].style.backgroundColor = "red";
 }
@@ -338,7 +334,7 @@ function MoveToNextSet() {
   playerHandText.textContent = currentPlayer.points;
   opponentHandText.textContent = otherPlayer.points;
   currentSet++;
-  currentSetText.textContent = currentSet;
+  console.log("Set: " + currentSet);
 
   nextSetBtn.style.visibility = "hidden";
   NextRound();
@@ -359,8 +355,8 @@ function ResetGame() {
   gameStatusText.textContent = "Welcome";
   playerHandText.textContent = "";
   opponentHandText.textContent = "";
-  currentSetText.textContent = "";
 
+  CleanSets();
   CleanTables();
   CleanHands();
 
@@ -395,8 +391,6 @@ function CreateStaticCard(card) {
   cardImg.setAttribute("src", card.imgSrc);
   cardImg.setAttribute("alt", "Card");
   currentPlayer.tableRef.appendChild(cardImg);
-  // if (!currentPlayer.isAI) playerTableImgs.appendChild(cardImg);
-  // else opponentTableImgs.appendChild(cardImg);
   return cardImg;
 }
 
@@ -415,15 +409,19 @@ function CreatePlayableCard(card, index) {
     PlayCard(index);
   }
   currentPlayer.handRef.appendChild(cardImg);
-
-  // if (!currentPlayer.isAI) playerCardsImgs.appendChild(cardImg);
-  // else opponentCardsImgs.appendChild(cardImg);
   return cardImg;
 }
 
 function RemovePlayableCard(index) {
   if (currentPlayer.handRef.hasChildNodes()) {
     currentPlayer.handRef.removeChild(currentPlayer.handRef.children[index]);
+  }
+}
+
+function CleanSets() {
+  for (var i = 0; i < leftSets.length; i++) {
+    leftSets.children[i].style.backgroundColor = "white";
+    rightSets.children[i].style.backgroundColor = "white";
   }
 }
 

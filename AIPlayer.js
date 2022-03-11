@@ -16,7 +16,7 @@ export function Decide(AIPlayer, OpponentPlayer) {
       return { action: Pass };
     } else {
       if (difference < 3) {
-        var plusCard = GetCard(AICards, 1);
+        var plusCard = GetCard(AIPlayer.handCards, 1);
         if (plusCard != undefined)
           return { action: PlayCard, playCardIndex: plusCard };
         else {
@@ -28,7 +28,7 @@ export function Decide(AIPlayer, OpponentPlayer) {
 
       // (25%) -- Use -1 card
       if (Utils.GetRandomInt(1, 100) <= 25) {
-        var minusCard = GetCard(AICards, -1);
+        var minusCard = GetCard(AIPlayer.handCards, -1);
         if (minusCard != undefined)
           return { action: PlayCard, playCardIndex: minusCard };
       }

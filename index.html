@@ -10,19 +10,22 @@
 
 <body>
   <h1>Pazaak</h1>
-  <h2 id="statusText">Welcome</h2>
-  <div class="setDiv">
-    <p id="setText"></p>
+
+  <div class="upperInfoDiv">
+    <div class="leftDiv">
+      <div class="singlePointDiv">
+        <p id="playerText"></p>
+      </div>
+    </div>
+    <h2 id="statusText" class="statusText">Welcome</h2>
+    <div class="rightDiv">
+      <div class="singlePointDiv">
+        <p id="opponentText"></p>
+      </div>
+    </div>
   </div>
 
-  <div class="pointsDiv">
-    <div class="singlePointDiv">
-      <p id="playerText"></p>
-    </div>
-    <div class="singlePointDiv">
-      <p id="opponentText"></p>
-    </div>
-  </div>
+
 
   <div class="allTableDiv">
     <div class="mainTableDiv">
@@ -36,10 +39,10 @@
     </div>
 
     <div class="lowerTableDiv">
-      <div id="leftSetDiv" class="leftSetDiv">
-        <li class="setIdentifier">1</li>
-        <li class="setIdentifier">2</li>
-        <li class="setIdentifier">3</li>
+      <div id="leftDiv" class="leftSetDiv">
+        <li class="setIdentifier"></li>
+        <li class="setIdentifier"></li>
+        <li class="setIdentifier"></li>
       </div>
       <div class="handTableDiv">
         <div id="playerCardsImg" class="cardsdiv">
@@ -49,10 +52,10 @@
           <!-- Hand Cards go here -->
         </div>
       </div>
-      <div id="rightSetDiv" class="rightSetDiv">
-        <li class="setIdentifier">1</li>
-        <li class="setIdentifier">2</li>
-        <li class="setIdentifier">3</li>
+      <div id="rightDiv" class="rightSetDiv">
+        <li class="setIdentifier"></li>
+        <li class="setIdentifier"></li>
+        <li class="setIdentifier"></li>
       </div>
     </div>
 
